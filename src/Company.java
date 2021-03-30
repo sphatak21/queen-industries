@@ -10,7 +10,7 @@ public class Company {
     public static final double SHARE_PRICE = 123.45;
 
     private String name;
-    private List<Employee> staff;
+    private static List<Employee> staff;
     private static Company company;
 
     /**
@@ -38,6 +38,7 @@ public class Company {
         staff.add(new Director(215000, 2500, 15000, "Felicity Smoak", "Engineering", "Director of Engineering", new ArrayList<>(), Company.DIRECTOR));
         staff.add(new Director(1650000, 1500, 25000, "Oliver Queen", "Sales", "Director of Sales", new ArrayList<>(), Company.DIRECTOR));
     }
+
 
     /**
      * Staffs the Engineering department. DO NOT MODIFY.
@@ -138,6 +139,8 @@ public class Company {
         marketingManager.fire(employee);
     }
 
+
+
     /**
      * Adjust the salaries of Employees. DO NOT MODIFY.
      *
@@ -222,4 +225,60 @@ public class Company {
         company.adjustSalaries();
         company.testInvalidOperations();
     }
+
+
+
+    private Director getDirector(String department){
+        for(Employee e : staff){
+            if(e.getTitleInt() == 3){
+                if(e.getDepartment().equals(department)){
+                    return (Director) e; 
+                }
+            }
+        }
+        return null; //for now, will most likely throw exception later 
+    }
+    private Employee getEmployee(String employeeName) {
+        for(Employee e : staff){
+                if(e.getName().equals(employeeName)){
+                    return e;
+                }
+        }
+        return null; //for now, will most likely throw exception later
+    }
+    private void printEmployeeDetails(Employee e){
+        System.out.println("Employee     : " + e.getName());
+        System.out.println("Department   : " + e.getDepartment());
+        System.out.println("Title        : " + e.getTitleString());
+        System.out.println("Compensation : " + (double) e.getSalary());
+
+    }
+    private void printOrganizationChart() {
+        System.out.println("Queen Industries Organization Chart");
+        for(Employee d : staff){
+            if(d.getTitleInt() == DIRECTOR){
+                Director currentDirector = (Director) d;
+                System.out.println(" - " + currentDirector.getName() + ", " + currentDirector.getTitleString());
+                for(Employee m : currentDirector.getReports() ){
+                    if(m.getTitleInt() == MANAGER) {
+                        Manager currentManager = (Manager) m;
+                        System.out.println("\t - " + currentManager.getName() + ", " + currentManager.getTitleString());
+                        for(Employee e : currentManager.getReports()){
+                            System.out.println("\t\t - " + e.getName() + ", " + e.getTitleString());
+                        }
+                    }else{
+                        System.out.println("\t - " + m.getName() + ", " + m.getTitleString());
+                    }
+
+                }
+            }
+        }
+    }
+    public static void addStaff(Employee e){
+        staff.add(e);
+    }
+    public static void removeStaff(Employee e) {
+        staff.remove(e);
+    }
+
 }
